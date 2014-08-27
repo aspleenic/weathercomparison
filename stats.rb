@@ -8,25 +8,58 @@ require 'rest-client'
 # require 'datamapper'
 
 get '/' do
-  
+  erb :index
+end
+
+get '/amherst' do
   type = params[:type]
   logger.info(type)
-  api_result = RestClient.get 'http://api.wunderground.com/api/590adcdd681bf6e0/conditions/q/NY/Amherst.json'
+  api_result = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=5116303&units=imperial'
   jhash = JSON.parse(api_result)
-  counter = jhash['results'].count
   output = ''
 
-  jhash['results'].each do |j|
-    name = j['name']
-    city = j['city']
-    focus = j['who']
-    count = j['members']
-    contact = j['organizer_name']
-    link = j['link']
-    country = j['country']
-    
-    output << "<tr><td>#{name}</td> <td><a href = '#{link}' target = _new>#{city}</a></td><td>#{country.upcase}</td><td>#{focus}</td> <td>#{count}</td><td>#{contact}</td></tr>"
+  jhash['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
   end
   
-  erb :index, :locals => {result: output, counter: counter}
+  erb :index, :locals => {result: output}
 end
+
+get '/dublin' do
+  type = params[:type]
+  logger.info(type)
+  api_result = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=5344157&units=imperial'
+  jhash = JSON.parse(api_result)
+  output = ''
+
+  jhash['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
+  end
+  
+  erb :index, :locals => {result: output}
+end
+
+get '/stockholm' do
+  type = params[:type]
+  logger.info(type)
+  api_result = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=2673730&units=imperial'
+  jhash = JSON.parse(api_result)
+  output = ''
+
+  jhash['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
+  end
+  
+  erb :index, :locals => {result: output}
+end
+
+
+# Amherst, NY USA   5116303
+# Dublin, Ireland   5344157
+# Stockholm, Sweden 2673730
