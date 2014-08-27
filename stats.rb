@@ -8,7 +8,37 @@ require 'rest-client'
 # require 'datamapper'
 
 get '/' do
-  erb :index
+  api_result = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=5116303&units=imperial'
+  jhash = JSON.parse(api_result)
+  output = ''
+
+  jhash['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output << "<table><tr><td>#{title}</td><td>#{item}</td></tr></table>"
+  end
+  
+  api_result2 = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=5344157&units=imperial'
+  jhash2 = JSON.parse(api_result2)
+  output2 = ''
+
+  jhash2['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output2 << "<table><tr><td>#{title}</td><td>#{item}</td></tr></table>"
+  end
+  
+  api_result3 = RestClient.get 'http://api.openweathermap.org/data/2.5/weather?id=2673730&units=imperial'
+  jhash3 = JSON.parse(api_result3)
+  output3 = ''
+
+  jhash3['main'].each do |j|
+    title = j[0]
+    item = j[1]
+    output3 << "<table><tr><td>#{title}</td><td>#{item}</td></tr></table>"
+  end
+
+  erb :index, :locals => {result1: output, result2: output2, result3: output3}
 end
 
 get '/amherst' do
@@ -24,7 +54,7 @@ get '/amherst' do
     output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
   end
   
-  erb :index, :locals => {result: output}
+  erb :amherst, :locals => {result: output}
 end
 
 get '/dublin' do
@@ -40,7 +70,7 @@ get '/dublin' do
     output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
   end
   
-  erb :index, :locals => {result: output}
+  erb :dublin, :locals => {result: output}
 end
 
 get '/stockholm' do
@@ -56,7 +86,7 @@ get '/stockholm' do
     output << "<tr><td>#{title}</td><td>#{item}</td></tr>"
   end
   
-  erb :index, :locals => {result: output}
+  erb :stockholm, :locals => {result: output}
 end
 
 
